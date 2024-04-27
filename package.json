@@ -6,9 +6,6 @@
     "build-only": "webpack --mode=production",
     "clean": "rimraf dist"
   },
-  "dependencies": {
-    "pixi.js": "^7.4.0"
-  },
   "devDependencies": {
     "copy-webpack-plugin": "^12.0.2",
     "html-webpack-plugin": "^5.6.0",
@@ -20,5 +17,9 @@
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.2"
+  },
+  "dependencies": {
+    "pixi-filters": "^6.0.3",
+    "pixi.js": "^8.1.0"
   }
 }
