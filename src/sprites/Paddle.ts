@@ -1,11 +1,11 @@
-import { Graphics, Ticker } from "pixi.js";
+import { Ticker } from "pixi.js";
+import { BaseSprite } from "./BaseSprite";
 
-export class Paddle extends Graphics {
-    private readonly MOVE_DISTANCE = 5
-    private readonly WINDOW_WIDTH: number;
-    private readonly WINDOW_HEIGHT: number;
+export class Paddle extends BaseSprite {
+    private readonly MOVE_DISTANCE = 6
     private upControl: string = ""
     private downControl: string = ""
+    private _score = 0
 
     constructor(
         windowWidth: number,
@@ -15,10 +15,8 @@ export class Paddle extends Graphics {
         width: number,
         height: number
     ) {
-        super()
+        super(windowWidth, windowHeight)
 
-        this.WINDOW_WIDTH = windowWidth
-        this.WINDOW_HEIGHT = windowHeight
 
         this.rect(0, 0, width, height)
         this.fill(0xffffff)
@@ -31,17 +29,20 @@ export class Paddle extends Graphics {
         this.downControl = downControl
     }
 
-    public update(dt: Ticker, keysPressed: Record<string, boolean>) {
-        this.onKeyDown(keysPressed)
+    public override update(dt: Ticker, keysPressed: Record<string, boolean>) {
+        this.onKeyDown(dt, keysPressed)
     }
 
-    private async onKeyDown(keysPressed: Record<string, boolean>) {
+    private async onKeyDown(dt: Ticker, keysPressed: Record<string, boolean>) {
         if (keysPressed[this.upControl]) {
-            this.position.y = Math.max(5, this.position.y - this.MOVE_DISTANCE)
+            this.position.y = Math.max(5, this.position.y - this.MOVE_DISTANCE * dt.deltaTime)
         }
 
         if (keysPressed[this.downControl]) {
-            this.position.y = Math.min(this.WINDOW_HEIGHT - this.height - 5, this.position.y + this.MOVE_DISTANCE)
+            this.position.y = Math.min(this.WINDOW_HEIGHT - this.height - 5, this.position.y + this.MOVE_DISTANCE * dt.deltaTime)
         }
     }
+
+    public get Score() { return this._score }
+    public set Score(value: number) { this._score = value }
 }

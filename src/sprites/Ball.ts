@@ -1,25 +1,76 @@
-import { Graphics } from "pixi.js";
+import { Ticker } from "pixi.js";
+import { BaseSprite } from "./BaseSprite";
 
-export class Ball extends Graphics {
-    private readonly WINDOW_WIDTH: number
-    private readonly WINDOW_HEIGHT: number
+export class Ball extends BaseSprite {
+
+    private dx: number
+    private dy: number
+
+    private xPosStart: number
+    private yPosStart: number
 
     constructor(
         windowWidth: number,
         windowHeight: number,
-        xPos: number,
-        yPos: number,
+        xPosStart: number,
+        yPosStart: number,
         length: number
     ) {
-        super()
-
-        this.WINDOW_WIDTH = windowWidth
-        this.WINDOW_HEIGHT = windowHeight
+        super(windowWidth, windowHeight)
 
         this.rect(0, 0, length, length)
         this.fill(0xffffff)
 
-        this.x = xPos
-        this.y = yPos
+        this.xPosStart = xPosStart
+        this.yPosStart = yPosStart
+
+        this.x = xPosStart
+        this.y = yPosStart
+
+        this.dx = 0
+        this.dy = 0
+    }
+
+    public update(dt: Ticker) {
+        let dxUpdate = this.dx * dt.deltaTime
+        let dyUpdate = this.dy * dt.deltaTime
+
+        if (
+            this.position.y + dyUpdate <= 5 ||
+            this.position.y + dyUpdate >= this.WINDOW_HEIGHT - this.height - 5
+        ) {
+            this.dy *= -1
+            dyUpdate = this.dy * dt.deltaTime
+        }
+
+        this.position.x += dxUpdate
+        this.position.y += dyUpdate
+    }
+
+    public reset() {
+        this.position.x = this.xPosStart
+        this.position.y = this.yPosStart
+        this.dy = 0
+        this.dx = 0
+    }
+
+    public serveBall(direction: "Player 1" | "Player 2") {
+        switch (direction) {
+            case "Player 1":
+                this.dx = 2
+                break
+            case "Player 2":
+                this.dx = -2
+                break
+        }
+
+        this.dy = (Math.random() * 10) > 5 ? Math.random() * 2 : Math.random() * -2
+    }
+
+    public changeDirectionAfterCollision(dt: Ticker) {
+        this.dx *= -1.05
+        this.dy = this.dy < 0 ? Math.random() * -2 : Math.random() * 2
+        this.position.x += this.dx * dt.deltaTime
+        this.position.y += this.dy * dt.deltaTime
     }
 }

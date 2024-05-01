@@ -1,3 +1,3 @@
 import { App } from "./App";
 
-const app = new App(window, document)
+new App(window, document)
