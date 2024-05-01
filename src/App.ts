@@ -50,7 +50,6 @@ export class App {
         this.document.addEventListener("scene-change", (event) => this.onSceneChange(event, this))
 
         this.app.ticker.add((dt) => this.onUpdate(dt))
-
     }
 
     private onKeyDown(event: KeyboardEvent, _app: App) {

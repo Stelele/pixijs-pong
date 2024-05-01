@@ -22,6 +22,9 @@ export class PlayScene extends BaseScene {
     private gameState: "serve" | "play" | "win"
     private servingPlayer: "Player 1" | "Player 2"
 
+    private readonly playerScoresSound = new Audio("sounds/player_scores.wav")
+    private readonly playerWinsSound = new Audio("sounds/player_wins.wav")
+
     constructor(windowWidth: number, windowHeight: number, document: Document) {
         super(windowWidth, windowHeight, document)
 
@@ -135,6 +138,7 @@ export class PlayScene extends BaseScene {
             this.ball.reset()
             this.gameState = "serve"
             this.servingPlayer = "Player 1"
+            this.playerScoresSound.play()
         }
 
         if (this.ball.x > this.WINDOW_WIDTH) {
@@ -142,10 +146,12 @@ export class PlayScene extends BaseScene {
             this.ball.reset()
             this.gameState = "serve"
             this.servingPlayer = "Player 2"
+            this.playerScoresSound.play()
         }
 
         if (this.player1.Score === 10 || this.player2.Score === 10) {
             this.gameState = "win"
+            this.playerWinsSound.play()
         }
     }
 }

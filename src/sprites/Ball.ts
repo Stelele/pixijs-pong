@@ -9,6 +9,8 @@ export class Ball extends BaseSprite {
     private xPosStart: number
     private yPosStart: number
 
+    private sounds: Record<string, HTMLAudioElement>
+
     constructor(
         windowWidth: number,
         windowHeight: number,
@@ -29,6 +31,12 @@ export class Ball extends BaseSprite {
 
         this.dx = 0
         this.dy = 0
+
+        this.sounds = {
+            "ball_hit_wall": new Audio('sounds/ball_hit_wall.wav'),
+            "ball_hit_paddle": new Audio('sounds/paddle_hit_ball.wav')
+        }
+
     }
 
     public update(dt: Ticker) {
@@ -41,6 +49,7 @@ export class Ball extends BaseSprite {
         ) {
             this.dy *= -1
             dyUpdate = this.dy * dt.deltaTime
+            this.sounds["ball_hit_wall"].play()
         }
 
         this.position.x += dxUpdate
@@ -72,5 +81,6 @@ export class Ball extends BaseSprite {
         this.dy = this.dy < 0 ? Math.random() * -2 : Math.random() * 2
         this.position.x += this.dx * dt.deltaTime
         this.position.y += this.dy * dt.deltaTime
+        this.sounds["ball_hit_paddle"].play()
     }
 }
